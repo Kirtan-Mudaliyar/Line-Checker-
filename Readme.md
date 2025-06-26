@@ -1,4 +1,4 @@
-<h1>🏃‍♂️ Line Checker – Personal Workout Counter</h1>
+<h1> Line Checker – Personal Workout Counter</h1>
 
 <p>
   <img src="images/demo.png" alt="Line Checker Demo" width="60%" />
@@ -10,7 +10,7 @@
 
 ---
 
-## 🧠 Project Background
+## Project Background
 
 This project was inspired by a personal need during my exercise sessions — counting line checks manually became repetitive and error-prone.
 
@@ -22,15 +22,15 @@ This Line Checker automatically tracks line checks based on your selection (15 /
 ## 📋 Features
 
 <ul>
-  <li>🚶 Real-time detection using an ultrasonic sensor</li>
-  <li>🔘 Push buttons for selecting 15, 20, or 30 line check modes</li>
-  <li>📟 LCD displays the current count</li>
-  <li>🔊 Buzzers provide short feedback after each check and a long buzz at the end</li>
+  <li> Real-time detection using an ultrasonic sensor</li>
+  <li> Push buttons for selecting 15, 20, or 30 line check modes</li>
+  <li> LCD displays the current count</li>
+  <li> Buzzers provide short feedback after each check and a long buzz at the end</li>
 </ul>
 
 ---
 
-## 🛠️ How It Works
+## 🛠 How It Works
 
 <ol>
   <li>On power-up, LCD prompts: <code>Enter number of Line checks :)</code></li>
@@ -48,7 +48,7 @@ This Line Checker automatically tracks line checks based on your selection (15 /
 
 ---
 
-## 🧪 Simulation Notes
+##  Simulation Notes
 
 > Compatible with [Wokwi Arduino Simulator](https://wokwi.com/).  
 > ⚠️ *Wokwi pushbuttons default to a "pressed" state — verify actual logic with physical hardware for accuracy.*
@@ -71,7 +71,7 @@ This Line Checker automatically tracks line checks based on your selection (15 /
 
 ---
 
-## 📸 Hardware Setup
+##  Hardware Setup
 
 <p>
   <img src="images/circuit .png" alt="Circuit Hardware Setup" width="70%" />
@@ -79,12 +79,12 @@ This Line Checker automatically tracks line checks based on your selection (15 /
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```plaintext
-📦 Line-Checker/
- ┣ 📜 LineChecker.ino
- ┣ 📜 README.md
- ┣ 📁 images/
- ┃ ┣ 📸 demo.png
- ┃ ┗ 📸 hardware_setup.png
+ Line-Checker/
+ ┣  LineChecker.ino
+ ┣  README.md
+ ┣  images/
+ ┃ ┣  demo.png
+ ┃ ┗  hardware_setup.png
