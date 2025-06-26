@@ -19,7 +19,7 @@ This Line Checker automatically tracks line checks based on your selection (15 /
 
 ---
 
-## 📋 Features
+## Features
 
 <ul>
   <li> Real-time detection using an ultrasonic sensor</li>
@@ -30,7 +30,7 @@ This Line Checker automatically tracks line checks based on your selection (15 /
 
 ---
 
-## 🛠 How It Works
+## How It Works
 
 <ol>
   <li>On power-up, LCD prompts: <code>Enter number of Line checks :)</code></li>
