@@ -1,49 +1,67 @@
-<h1>🚦 Line Checker</h1>
+<h1>🏃‍♂️ Line Checker – Personal Workout Counter</h1>
 
 <p>
   <img src="images/demo.png" alt="Line Checker Demo" width="60%" />
 </p>
 
 <p>
-  <b>A smart inspection system with ultrasonic detection, LCD, buzzers, and push buttons.</b>
+  <b>An exercise companion that counts your line checks during workouts using push buttons, buzzers, LCD, and an ultrasonic sensor.</b>
 </p>
+
+---
+
+## 🧠 Project Background
+
+This project was inspired by a personal need during my exercise sessions — counting line checks manually became repetitive and error-prone.
+
+So, I decided to apply my embedded systems knowledge to solve a real-world problem in my daily life.  
+This Line Checker automatically tracks line checks based on your selection (15 / 20 / 30) and ensures focus during workouts without losing count.
 
 ---
 
 ## 📋 Features
 
 <ul>
-  <li>🎯 Detects objects using ultrasonic sensor</li>
-  <li>🔘 Button modes: 15, 20, or 30 Line Checks</li>
-  <li>📟 LCD shows current line check count</li>
-  <li>🔊 Buzzer beeps after each count and longer beep at end</li>
+  <li>🚶 Real-time detection using an ultrasonic sensor</li>
+  <li>🔘 Push buttons for selecting 15, 20, or 30 line check modes</li>
+  <li>📟 LCD displays the current count</li>
+  <li>🔊 Buzzers provide short feedback after each check and a long buzz at the end</li>
 </ul>
 
 ---
 
-## 🧠 How It Works
+## 🛠️ How It Works
 
 <ol>
-  <li>LCD displays: <code>Enter number of Line checks :)</code></li>
-  <li>If object is within 30 cm, pressing a button starts the counter</li>
-  <li>For each count:
+  <li>On power-up, LCD prompts: <code>Enter number of Line checks :)</code></li>
+  <li>Object must be within 30 cm (i.e., proximity detection for safety or interaction)</li>
+  <li>User presses one of the buttons to start the count (15/20/30)</li>
+  <li>Each count:
     <ul>
-      <li>LCD updates</li>
-      <li>Short buzzer beep</li>
+      <li>Increments line check count</li>
+      <li>Displays on LCD</li>
+      <li>Plays short buzzer sound</li>
     </ul>
   </li>
-  <li>After final count, long buzzer rings</li>
+  <li>Final count ends with a long buzzer beep</li>
 </ol>
 
 ---
 
-## 🔌 Circuit Pins
+## 🧪 Simulation Notes
+
+> Compatible with [Wokwi Arduino Simulator](https://wokwi.com/).  
+> ⚠️ *Wokwi pushbuttons default to a "pressed" state — verify actual logic with physical hardware for accuracy.*
+
+---
+
+## 📌 Circuit Connections
 
 <table>
   <tr><th>Component</th><th>Pin</th></tr>
-  <tr><td>Ultrasonic Trig</td><td>D12</td></tr>
-  <tr><td>Ultrasonic Echo</td><td>D13</td></tr>
-  <tr><td>LCD RS / E / D4–D7</td><td>D14, D16, D25–D27, D4</td></tr>
+  <tr><td>Ultrasonic Sensor (Trig)</td><td>D12</td></tr>
+  <tr><td>Ultrasonic Sensor (Echo)</td><td>D13</td></tr>
+  <tr><td>LCD (RS, E, D4–D7)</td><td>D14, D16, D25–D27, D4</td></tr>
   <tr><td>Button - 15 Line Checks</td><td>D17</td></tr>
   <tr><td>Button - 20 Line Checks</td><td>D18</td></tr>
   <tr><td>Button - 30 Line Checks</td><td>D19</td></tr>
@@ -53,22 +71,15 @@
 
 ---
 
-## 🧪 Simulation Notes
+## 📸 Hardware Setup
 
-> This project is compatible with the [Wokwi Arduino Simulator](https://wokwi.com/).  
-> ⚠️ *Wokwi pushbuttons default to 'pressed' state — make sure to verify physical behavior during hardware implementation.*
-
----
-
-## 🛠 Real-Life Tips
-
-- Add hardware debounce if buttons are noisy.
-- Ensure ultrasonic sensor is properly aligned.
-- Use reliable power source for LCD and buzzers.
+<p>
+  <img src="images/hardware_setup.png" alt="Circuit Hardware Setup" width="70%" />
+</p>
 
 ---
 
-## 📁 File Structure
+## 📁 Project Structure
 
 ```plaintext
 📦 Line-Checker/
