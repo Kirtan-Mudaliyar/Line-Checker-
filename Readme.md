@@ -1,10 +1,10 @@
-<h1 align="center">🚦 Line Checker</h1>
+<h1>🚦 Line Checker</h1>
 
-<p align="center">
+<p>
   <img src="images/demo.png" alt="Line Checker Demo" width="60%" />
 </p>
 
-<p align="center">
+<p>
   <b>A smart inspection system with ultrasonic detection, LCD, buzzers, and push buttons.</b>
 </p>
 
@@ -75,5 +75,5 @@
  ┣ 📜 LineChecker.ino
  ┣ 📜 README.md
  ┣ 📁 images/
- ┃ ┗ 📸 demo.png
+ ┃ ┣ 📸 demo.png
  ┃ ┗ 📸 hardware_setup.png
