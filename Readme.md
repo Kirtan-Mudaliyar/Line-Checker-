@@ -74,7 +74,7 @@ This Line Checker automatically tracks line checks based on your selection (15 /
 ## 📸 Hardware Setup
 
 <p>
-  <img src="images/hardware_setup.png" alt="Circuit Hardware Setup" width="70%" />
+  <img src="images/Circuit.png" alt="Circuit Hardware Setup" width="70%" />
 </p>
 
 ---
