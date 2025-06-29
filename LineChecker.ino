@@ -14,7 +14,7 @@ int ultimate_buzz = 22;
 
 int f = 0;
 int prevDisplay = -1;
-int linecheck_no = 0;  // Added here
+int linecheck_no = 0;
 
 BluetoothSerial linecheck;
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
@@ -22,12 +22,12 @@ LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 void setup() {
   Serial.begin(115200);
   linecheck.begin("ESP32 Wroom Devkit");
-  
+
   pinMode(trig, OUTPUT);
   pinMode(echo, INPUT);
   pinMode(single_buzz, OUTPUT);
   pinMode(ultimate_buzz, OUTPUT);
-  
+
   digitalWrite(trig, LOW);
   delayMicroseconds(2);
   delay(100);
@@ -42,6 +42,37 @@ void setup() {
 }
 
 void loop() {
+  // Check connection
+  if (linecheck.hasClient()) {
+    lcd.setCursor(0, 0);
+    lcd.print("ESP32 Connected ");
+    lcd.setCursor(0, 1);
+    lcd.print("Waiting number...");
+  } else {
+    lcd.setCursor(0, 0);
+    lcd.print("Waiting for BT ");
+    lcd.setCursor(0, 1);
+    lcd.print("to connect...   ");
+    delay(500);
+    return;  // Don't proceed if no client connected
+  }
+
+  // Read number from Bluetooth
+  if (linecheck.available()) {
+    linecheck_no = linecheck.parseInt();  // Safer than read()
+    Serial.print("Received number: ");
+    Serial.println(linecheck_no);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Got number :)");
+    lcd.setCursor(0, 1);
+    lcd.print("Checks: ");
+    lcd.print(linecheck_no);
+    delay(3000);
+    lcd.clear();
+  }
+
+  // Measure distance
   digitalWrite(trig, HIGH);
   delayMicroseconds(10);
   digitalWrite(trig, LOW);
@@ -52,33 +83,11 @@ void loop() {
   Serial.print(distance);
   Serial.println(" cm");
 
-  if (linecheck.available()) {
-    linecheck_no = linecheck.parseInt();  // Better than read()
-    Serial.print("Received linecheck_no: ");
-    Serial.println(linecheck_no);
-  }
-
-  if (linecheck.hasClient()) {
-    Serial.println("Device connected!");
-    lcd.setCursor(0, 0);
-    lcd.print("ESP32 Connected");
-    lcd.setCursor(0, 1);
-    lcd.print("Got number :)");
-    delay(3000);
-    lcd.clear();
-  } else {
-    Serial.println("Waiting for connection...");
-    lcd.setCursor(0, 0);
-    lcd.print("Waiting...");
-  }
-
-  if (distance < 30 && distance > 0)
-   {
-    for (int i = 1; i <= linecheck_no; i++)
-    {
+  // Start counting if within range and number is received
+  if (distance < 30 && distance > 0 && linecheck_no > 0) {
+    for (int i = 1; i <= linecheck_no; i++) {
       f++;
-      if (prevDisplay != f) 
-      {
+      if (prevDisplay != f) {
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("Line Checks:");
@@ -93,8 +102,8 @@ void loop() {
     digitalWrite(ultimate_buzz, HIGH);
     delay(10000);
     digitalWrite(ultimate_buzz, LOW);
-    linecheck_no = 0;  // Reset after execution
+    linecheck_no = 0; // Reset for next time
   }
 
-  delay(10);
+  delay(200);
 }
