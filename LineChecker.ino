@@ -1,6 +1,7 @@
-#include <LiquidCrystal.h>
-#include <BluetoothSerial.h>
+#include <LiquidCrystal.h>         // For controlling the LCD
+#include <BluetoothSerial.h>       // For Bluetooth communication
 
+// Pin definitions
 int trig = 12;
 int echo = 13;
 int RS = 14;
@@ -12,17 +13,24 @@ int D7 = 4;
 int single_buzz = 21;
 int ultimate_buzz = 22;
 
-int f = 0;
-int prevDisplay = -1;
-int linecheck_no = 0;
+// State variables
+int f = 0;                         // Counter for number of line checks
+int prevDisplay = -1;             // To avoid re-printing same count on LCD
+int linecheck_no = 0;             // Number received from user via Bluetooth
 
-BluetoothSerial linecheck;
-LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
+BluetoothSerial linecheck;        // Bluetooth Serial object
+LiquidCrystal lcd(RS, E, D4, D5, D6, D7);  // LCD setup
+
+
+// These are used to track timeout when no object is detected
+unsigned long noObjectStartTime = 0;
+bool noObjectDetected = false;
 
 void setup() {
   Serial.begin(115200);
-  linecheck.begin("ESP32 Wroom Devkit");
+  linecheck.begin("ESP32 Wroom Devkit");  // Start Bluetooth service
 
+  // Setup pin modes
   pinMode(trig, OUTPUT);
   pinMode(echo, INPUT);
   pinMode(single_buzz, OUTPUT);
@@ -32,6 +40,7 @@ void setup() {
   delayMicroseconds(2);
   delay(100);
 
+  // Initialize LCD and show welcome message
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
   lcd.print("Enter number of");
@@ -42,7 +51,7 @@ void setup() {
 }
 
 void loop() {
-  // Check connection
+  // 📶 Show Bluetooth connection status
   if (linecheck.hasClient()) {
     lcd.setCursor(0, 0);
     lcd.print("ESP32 Connected ");
@@ -54,25 +63,32 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("to connect...   ");
     delay(500);
-    return;  // Don't proceed if no client connected
+    return; // Exit loop if not connected
   }
 
-  // Read number from Bluetooth
+  // 📥 Check and read number from the app
   if (linecheck.available()) {
-    linecheck_no = linecheck.parseInt();  // Safer than read()
+    linecheck_no = linecheck.parseInt();  // Safely read integer
     Serial.print("Received number: ");
     Serial.println(linecheck_no);
+
+    // Show confirmation on LCD
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Got number :)");
+    lcd.print("Got Line Count");
     lcd.setCursor(0, 1);
     lcd.print("Checks: ");
     lcd.print(linecheck_no);
+
+    // Reset counters for new session
+    f = 0;
+    prevDisplay = -1;
+
     delay(3000);
     lcd.clear();
   }
 
-  // Measure distance
+  // 📏 Measure distance using ultrasonic sensor
   digitalWrite(trig, HIGH);
   delayMicroseconds(10);
   digitalWrite(trig, LOW);
@@ -83,9 +99,18 @@ void loop() {
   Serial.print(distance);
   Serial.println(" cm");
 
-  // Start counting if within range and number is received
-  if (distance < 30 && distance > 0 && linecheck_no > 0) {
-    for (int i = 1; i <= linecheck_no; i++) {
+  // 🧠 Logic to count line checks or timeout
+
+  // 🔹 Logic built with help of ChatGPT
+  // If distance is valid and target not yet reached
+  if (linecheck_no > 0 && f < linecheck_no) {
+    
+    if (distance <= 25 && distance > 0) {
+      // Reset timeout logic if object appears again
+      noObjectDetected = false;
+      noObjectStartTime = 0;
+
+      // 🔔 Buzz and count
       f++;
       if (prevDisplay != f) {
         lcd.clear();
@@ -98,12 +123,43 @@ void loop() {
       digitalWrite(single_buzz, HIGH);
       delay(2000);
       digitalWrite(single_buzz, LOW);
+    } else {
+      // 🔹 Logic for sending current count when no object detected under 10s is built with help of ChatGPT
+      // Start tracking "no object" time
+      if (!noObjectDetected) {
+        noObjectDetected = true;
+        noObjectStartTime = millis();
+      } 
+      // If no object for more than 10 seconds
+      else if (millis() - noObjectStartTime >= 10000) {
+        // Show final count and send it to app
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("No Object Found");
+        lcd.setCursor(0, 1);
+        lcd.print("Final Count: ");
+        lcd.print(f);
+
+        Serial.print("Final Count Sent: ");
+        Serial.println(f);
+        linecheck.println(f);  // 📤 Send to app
+
+        // Final buzz for alert
+        digitalWrite(ultimate_buzz, HIGH);
+        delay(10000);
+        digitalWrite(ultimate_buzz, LOW);
+
+        // Reset everything
+        linecheck_no = 0;
+        f = 0;
+        prevDisplay = -1;
+        noObjectDetected = false;
+
+        delay(3000);
+        lcd.clear();
+      }
     }
-    digitalWrite(ultimate_buzz, HIGH);
-    delay(10000);
-    digitalWrite(ultimate_buzz, LOW);
-    linecheck_no = 0; // Reset for next time
   }
 
-  delay(200);
+  delay(200);  // Short delay to avoid flooding
 }
