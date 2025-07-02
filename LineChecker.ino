@@ -28,7 +28,7 @@ bool noObjectDetected = false;
 
 void setup() {
   Serial.begin(115200);
-  linecheck.begin("ESP32 Wroom Devkit");  // Start Bluetooth service
+  linecheck.begin("LineCheck_BT");  // Start Bluetooth service
 
   // Setup pin modes
   pinMode(trig, OUTPUT);
@@ -54,9 +54,9 @@ void loop() {
   // 📶 Show Bluetooth connection status
   if (linecheck.hasClient()) {
     lcd.setCursor(0, 0);
-    lcd.print("ESP32 Connected");         // ✅ Fixed: was 17 chars
+    lcd.print("ESP32 Connected");         
     lcd.setCursor(0, 1);
-    lcd.print("Waiting number");          // ✅ Fixed: was 18 chars
+    lcd.print("Wait for num");         
   } else {
     lcd.setCursor(0, 0);
     lcd.print("Waiting for BT ");
@@ -146,7 +146,7 @@ void loop() {
 
         // Final buzz for alert
         digitalWrite(ultimate_buzz, HIGH);
-        delay(10000);
+        delay(5000);
         digitalWrite(ultimate_buzz, LOW);
 
         // Reset everything
