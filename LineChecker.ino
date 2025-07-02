@@ -1,6 +1,7 @@
 #include <LiquidCrystal.h>         // For controlling the LCD
 #include <BluetoothSerial.h>       // For Bluetooth communication
 
+// Comments for the each block were added with help of chat-gp (but not logic, its purely by me)
 // Pin definitions
 int trig = 12;
 int echo = 13;
@@ -20,7 +21,6 @@ int linecheck_no = 0;             // Number received from user via Bluetooth
 
 BluetoothSerial linecheck;        // Bluetooth Serial object
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);  // LCD setup
-
 
 // These are used to track timeout when no object is detected
 unsigned long noObjectStartTime = 0;
@@ -54,9 +54,9 @@ void loop() {
   // 📶 Show Bluetooth connection status
   if (linecheck.hasClient()) {
     lcd.setCursor(0, 0);
-    lcd.print("ESP32 Connected ");
+    lcd.print("ESP32 Connected");         // ✅ Fixed: was 17 chars
     lcd.setCursor(0, 1);
-    lcd.print("Waiting number...");
+    lcd.print("Waiting number");          // ✅ Fixed: was 18 chars
   } else {
     lcd.setCursor(0, 0);
     lcd.print("Waiting for BT ");
@@ -101,7 +101,7 @@ void loop() {
 
   // 🧠 Logic to count line checks or timeout
 
-  // 🔹 Logic built with help of ChatGPT
+  // 🔹 Logic for sending current counted line check number when no contact is detected for more than 10s is built with help of ChatGPT
   // If distance is valid and target not yet reached
   if (linecheck_no > 0 && f < linecheck_no) {
     
@@ -135,7 +135,7 @@ void loop() {
         // Show final count and send it to app
         lcd.clear();
         lcd.setCursor(0, 0);
-        lcd.print("No Object Found");
+        lcd.print("No Object Here");       // ✅ Fixed: was 17 chars
         lcd.setCursor(0, 1);
         lcd.print("Final Count: ");
         lcd.print(f);
